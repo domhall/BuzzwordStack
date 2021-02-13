@@ -34,7 +34,3 @@ resource "kubernetes_secret" "database-uri" {
     "dbport" = digitalocean_database_cluster.postgres-cluster.port
   }
 }
-
-# output "kubesecret" {
-#   value = kubernetes_secret.dockerconfig.data
-# }
