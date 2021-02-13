@@ -16,14 +16,37 @@ spec:
     spec:
       containers:
       - name: backend
-        image: registry.digitalocean.com/buzzword-stack-container-registry/backend:latest
+        image: registry.digitalocean.com/buzzword-stack-container-registry-dom/backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
           name: backend
         env:
-        - name: DB_URI
-          value: "postgresql://safeuser:vnvkx5mott5z1oew@buzzword-stack-database-cluster-do-user-8685688-0.b.db.ondigitalocean.com:25060/api_db?sslmode=require"
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: database-connection
+                key: dbname
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: database-connection
+                key: dbpass
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: database-connection
+                key: dbport
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: database-connection
+                key: dbuser
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: database-connection
+                key: dbhost
       imagePullSecrets:
         - name: regcred
 ---

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: registry.digitalocean.com/buzzword-stack-container-registry/frontend:latest
+        image: registry.digitalocean.com/buzzword-stack-container-registry-dom/frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
