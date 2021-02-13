@@ -12,14 +12,15 @@ resource "digitalocean_database_cluster" "postgres-cluster" {
   node_count = 1
 }
 
-resource "digitalocean_database_user" "db_user" {
+resource "digitalocean_database_user" "db-user" {
   cluster_id = digitalocean_database_cluster.postgres-cluster.id
   name       = "safeuser"
 }
+resource "digitalocean_database_firewall" "db-firewall" {
+  cluster_id = digitalocean_database_cluster.postgres-cluster.id
 
-output "dburi" {
-  value = digitalocean_database_cluster.postgres-cluster.uri
-}
-output "dbpass" {
-  value = digitalocean_database_user.db_user.password
+  rule {
+    type  = "k8s"
+    value = digitalocean_kubernetes_cluster.cluster.id
+  }
 }

@@ -1,5 +1,5 @@
 provider "kubernetes" {
-  config_path    = "~/.kube/config"
+  config_path    = local_file.kubeconfig.filename
   config_context = "do-ams3-buzzword-stack-kubernetes-cluster"
 }
 
@@ -22,6 +22,19 @@ resource "kubernetes_secret" "dockerconfig" {
   type = "kubernetes.io/dockerconfigjson"
 }
 
-output "kubesecret" {
-  value = kubernetes_secret.dockerconfig.data
+resource "kubernetes_secret" "database-uri" {
+  metadata {
+    name = "database-connection"
+  }
+  data = {
+    "dbname"  = digitalocean_database_db.database.name,
+    "dbuser" = digitalocean_database_user.db-user.name,
+    "dbpass" = digitalocean_database_user.db-user.password,
+    "dbhost" = digitalocean_database_cluster.postgres-cluster.private_host,
+    "dbport" = digitalocean_database_cluster.postgres-cluster.port
+  }
 }
+
+# output "kubesecret" {
+#   value = kubernetes_secret.dockerconfig.data
+# }
